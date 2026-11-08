@@ -1,0 +1,14 @@
+{
+  "name": "tunicar",
+  "version": "1.0.0",
+  "description": "Site de location de voitures en Tunisie (FR / AR tunisien / EN) avec réservation, paiements et administration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

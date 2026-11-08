@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TuniCar</title>
+  <meta name="description" content="Location de voitures en Tunisie : tarifs clairs, livraison à domicile, paiement par carte, PayPal, crypto ou à la livraison.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container nav">
+    <a href="#top" class="logo"><span class="logo-mark">TC</span><span class="logo-text">TuniCar</span></a>
+    <nav id="mainNav" class="main-nav">
+      <a href="#fleet" data-i18n="nav_fleet"></a>
+      <a href="#how" data-i18n="nav_how"></a>
+      <a href="#booking" data-i18n="nav_booking"></a>
+      <a href="#contact" data-i18n="nav_contact"></a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="fr">FR</button>
+        <button type="button" data-lang="ar">AR</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      <button class="burger" id="burger" type="button" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="container hero-inner">
+    <span class="eyebrow" data-i18n="hero_eyebrow"></span>
+    <h1 data-i18n="hero_title"></h1>
+    <p class="hero-sub" data-i18n="hero_sub"></p>
+    <div class="hero-actions">
+      <a href="#fleet" class="btn btn-ghost" data-i18n="hero_cta"></a>
+      <a href="#booking" class="btn btn-primary" data-i18n="hero_cta2"></a>
+    </div>
+    <ul class="trust">
+      <li data-i18n="trust1"></li>
+      <li data-i18n="trust2"></li>
+      <li data-i18n="trust3"></li>
+    </ul>
+  </div>
+</section>
+
+<section id="fleet" class="section">
+  <div class="container">
+    <h2 class="section-title" data-i18n="fleet_title"></h2>
+    <p class="muted" data-i18n="fleet_sub"></p>
+    <div class="grid" id="fleetGrid"></div>
+  </div>
+</section>
+
+<section id="how" class="section alt">
+  <div class="container">
+    <h2 class="section-title" data-i18n="how_title"></h2>
+    <div class="steps">
+      <div class="step card"><span class="step-num">1</span><h3 data-i18n="step1_t"></h3><p data-i18n="step1_d"></p></div>
+      <div class="step card"><span class="step-num">2</span><h3 data-i18n="step2_t"></h3><p data-i18n="step2_d"></p></div>
+      <div class="step card"><span class="step-num">3</span><h3 data-i18n="step3_t"></h3><p data-i18n="step3_d"></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="booking" class="section">
+  <div class="container">
+    <h2 class="section-title" data-i18n="booking_title"></h2>
+    <p class="muted" data-i18n="booking_sub"></p>
+
+    <div class="booking-grid">
+      <form id="bookingForm" class="card form" novalidate>
+        <label class="field full">
+          <span data-i18n="f_car"></span>
+          <select name="carId" id="carSelect" required></select>
+        </label>
+
+        <div class="row two">
+          <label class="field">
+            <span data-i18n="f_start"></span>
+            <input type="date" name="start" id="startDate" required>
+          </label>
+          <label class="field">
+            <span data-i18n="f_end"></span>
+            <input type="date" name="end" id="endDate" required>
+          </label>
+        </div>
+
+        <div class="row two">
+          <label class="field">
+            <span data-i18n="f_time"></span>
+            <select name="deliveryTime" id="timeSelect" required></select>
+          </label>
+          <fieldset class="field">
+            <legend data-i18n="f_mode"></legend>
+            <label class="radio"><input type="radio" name="deliveryMode" value="office" checked><span data-i18n="mode_office"></span></label>
+            <label class="radio"><input type="radio" name="deliveryMode" value="delivery"><span data-i18n="mode_delivery"></span></label>
+          </fieldset>
+        </div>
+
+        <label class="field full hidden" id="addressField">
+          <span data-i18n="f_address"></span>
+          <input name="address" autocomplete="street-address">
+        </label>
+
+        <div class="row two">
+          <label class="field">
+            <span data-i18n="f_name"></span>
+            <input name="name" required autocomplete="name">
+          </label>
+          <label class="field">
+            <span data-i18n="f_phone"></span>
+            <input name="phone" type="tel" required autocomplete="tel" placeholder="+216 ...">
+          </label>
+        </div>
+
+        <label class="field full">
+          <span data-i18n="f_email"></span>
+          <input name="email" type="email" autocomplete="email">
+        </label>
+
+        <fieldset class="field full">
+          <legend data-i18n="f_pay"></legend>
+          <div class="pay-options">
+            <label class="pay-opt"><input type="radio" name="paymentMethod" value="card" checked><span data-i18n="pay_card"></span></label>
+            <label class="pay-opt"><input type="radio" name="paymentMethod" value="paypal"><span data-i18n="pay_paypal"></span></label>
+            <label class="pay-opt"><input type="radio" name="paymentMethod" value="crypto"><span data-i18n="pay_crypto"></span></label>
+            <label class="pay-opt"><input type="radio" name="paymentMethod" value="cod"><span data-i18n="pay_cod"></span></label>
+          </div>
+        </fieldset>
+
+        <div class="pay-panel">
+          <p id="payInfo" class="note"></p>
+
+          <div id="cryptoFields" class="hidden">
+            <div class="row two">
+              <label class="field">
+                <span data-i18n="f_coin"></span>
+                <select name="coin">
+                  <option value="USDT">USDT (TRC20)</option>
+                  <option value="BTC">Bitcoin (BTC)</option>
+                </select>
+              </label>
+              <label class="field">
+                <span data-i18n="f_txhash"></span>
+                <input name="txHash" placeholder="hash / TxID">
+              </label>
+            </div>
+            <div class="wallet">
+              <code id="walletAddr"></code>
+              <button type="button" class="btn btn-sm" id="copyWallet" data-i18n="copy"></button>
+            </div>
+          </div>
+
+          <label class="field hidden" id="proofField">
+            <span data-i18n="f_proof"></span>
+            <input type="file" name="proof" accept="image/png,image/jpeg,image/webp">
+          </label>
+        </div>
+
+        <label class="field full">
+          <span data-i18n="f_notes"></span>
+          <textarea name="notes" rows="2"></textarea>
+        </label>
+
+        <button class="btn btn-primary btn-block" type="submit" id="submitBtn" data-i18n="submit"></button>
+        <p id="formError" class="alert hidden" role="alert"></p>
+        <div id="bookingResult" class="result hidden"></div>
+      </form>
+
+      <aside class="card summary">
+        <h3 data-i18n="summary_title"></h3>
+        <div id="summaryBody"></div>
+        <p id="availNote" class="avail"></p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="section alt">
+  <div class="container contact-grid">
+    <div>
+      <h2 class="section-title" data-i18n="contact_title"></h2>
+      <p class="muted" data-i18n="contact_hours"></p>
+    </div>
+    <ul class="contact-list" id="contactList"></ul>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p><strong id="footerName">TuniCar</strong> — <span data-i18n="footer_note"></span></p>
+  </div>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>

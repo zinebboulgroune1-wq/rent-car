@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>TuniCar — Administration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --navy:#0b1f33; --gold:#e0a526; --bg:#f3f6fa; --line:#e2e8f0; --muted:#64748b; --ok:#15803d; --warn:#b45309; --bad:#b91c1c; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:#0f172a; font-size:14px; }
+    .hidden { display:none !important; }
+    header { background:var(--navy); color:#fff; padding:14px 22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    header strong { color:var(--gold); font-size:1.1rem; }
+    nav.tabs { display:flex; gap:4px; background:#fff; border-bottom:1px solid var(--line); padding:0 16px; overflow-x:auto; }
+    nav.tabs button { border:0; background:none; padding:14px 14px; font:inherit; font-weight:600; color:var(--muted); cursor:pointer; border-bottom:3px solid transparent; white-space:nowrap; }
+    nav.tabs button.active { color:var(--navy); border-color:var(--gold); }
+    main { padding:22px; max-width:1300px; margin:0 auto; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-bottom:18px; }
+    .stat { background:#fff; border-radius:12px; padding:16px; box-shadow:0 2px 10px rgba(15,23,42,.06); }
+    .stat small { color:var(--muted); font-weight:600; text-transform:uppercase; font-size:.7rem; letter-spacing:.05em; }
+    .stat b { display:block; font-size:1.6rem; color:var(--navy); margin-top:4px; }
+    .panel { background:#fff; border-radius:12px; padding:18px; box-shadow:0 2px 10px rgba(15,23,42,.06); margin-bottom:18px; overflow-x:auto; }
+    .panel h3 { margin:0 0 12px; color:var(--navy); font-size:1rem; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { text-align:left; padding:9px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+    th { color:var(--muted); font-size:.75rem; text-transform:uppercase; letter-spacing:.04em; }
+    td.small { font-size:.8rem; color:var(--muted); max-width:280px; word-break:break-word; }
+    .pill { display:inline-block; padding:3px 9px; border-radius:999px; font-size:.75rem; font-weight:700; background:#e2e8f0; color:#334155; }
+    .pill.awaiting_payment { background:#fef3c7; color:#92400e; }
+    .pill.pending_review { background:#dbeafe; color:#1e40af; }
+    .pill.confirmed { background:#dcfce7; color:#166534; }
+    .pill.delivered { background:#e0e7ff; color:#3730a3; }
+    .pill.cancelled { background:#fee2e2; color:#991b1b; }
+    input, select, textarea { font:inherit; padding:7px 9px; border:1px solid #cbd5e1; border-radius:8px; background:#fff; }
+    button.btn { font:inherit; font-weight:600; padding:8px 14px; border-radius:8px; border:0; background:var(--navy); color:#fff; cursor:pointer; }
+    button.btn.gold { background:var(--gold); color:var(--navy); }
+    button.btn.light { background:#e2e8f0; color:var(--navy); }
+    button.btn:disabled { opacity:.5; }
+    .toolbar { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .form-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; align-items:end; }
+    .form-grid label { display:flex; flex-direction:column; gap:4px; font-size:.8rem; font-weight:600; color:var(--muted); }
+    .bars div { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line); }
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    @media (max-width:900px) { .two-col { grid-template-columns:1fr; } }
+    .login { max-width:360px; margin:12vh auto; background:#fff; padding:28px; border-radius:14px; box-shadow:0 10px 30px rgba(15,23,42,.1); }
+    .login h2 { margin:0 0 16px; color:var(--navy); }
+    .login label { display:flex; flex-direction:column; gap:5px; margin-bottom:12px; font-weight:600; font-size:.85rem; }
+    .login input { width:100%; }
+    .login .btn { width:100%; padding:11px; }
+    .err { color:var(--bad); font-weight:600; min-height:1.2em; }
+    .ok-text { color:var(--ok); font-weight:600; }
+    .order-id { font-family:ui-monospace,Menlo,monospace; font-weight:700; color:var(--navy); }
+    .notes { font-size:.8rem; color:var(--muted); margin-top:4px; }
+  </style>
+</head>
+<body>
+
+<section id="loginView" class="login">
+  <h2>Administration</h2>
+  <form id="loginForm">
+    <label>Identifiant <input name="username" autocomplete="username" required></label>
+    <label>Mot de passe <input name="password" type="password" autocomplete="current-password" required></label>
+    <button class="btn gold" type="submit">Se connecter</button>
+    <p id="loginErr" class="err"></p>
+  </form>
+</section>
+
+<div id="appView" class="hidden">
+  <header>
+    <div><strong>TuniCar</strong> · Espace propriétaire</div>
+    <div class="toolbar">
+      <button class="btn light" id="refreshBtn" type="button">Actualiser</button>
+      <button class="btn" id="logoutBtn" type="button">Déconnexion</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button data-tab="dash" class="active" type="button">Tableau de bord</button>
+    <button data-tab="visits" type="button">Visiteurs</button>
+    <button data-tab="orders" type="button">Réservations</button>
+    <button data-tab="cars" type="button">Véhicules</button>
+  </nav>
+
+  <main>
+    <!-- Dashboard -->
+    <section id="tab-dash">
+      <div class="cards" id="statCards"></div>
+      <div class="two-col">
+        <div class="panel"><h3>Langues des visiteurs</h3><div class="bars" id="langBars"></div></div>
+        <div class="panel"><h3>Pays (si détecté)</h3><div class="bars" id="countryBars"></div></div>
+      </div>
+      <div class="panel"><h3>Dernières réservations</h3><div id="recentOrders"></div></div>
+    </section>
+
+    <!-- Visitors -->
+    <section id="tab-visits" class="hidden">
+      <div class="panel">
+        <h3>Visiteurs <span class="notes">Les 2 000 dernières visites</span></h3>
+        <table>
+          <thead><tr><th>Date (Tunis)</th><th>Pays</th><th>IP</th><th>Langue</th><th>Page</th><th>Provenance</th><th>Écran / fuseau</th><th>Appareil</th></tr></thead>
+          <tbody id="visitRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Orders -->
+    <section id="tab-orders" class="hidden">
+      <div class="panel">
+        <h3>
+          <span>Réservations</span>
+          <span class="toolbar">
+            <select id="orderFilter">
+              <option value="">Tous les statuts</option>
+              <option value="awaiting_payment">En attente de paiement</option>
+              <option value="pending_review">À vérifier</option>
+              <option value="confirmed">Confirmées (payées)</option>
+              <option value="delivered">Livrées</option>
+              <option value="cancelled">Annulées</option>
+            </select>
+            <button class="btn light" id="exportBtn" type="button">Exporter CSV</button>
+          </span>
+        </h3>
+        <table>
+          <thead><tr><th>Commande</th><th>Client</th><th>Véhicule & dates</th><th>Livraison</th><th>Paiement</th><th>Montant</th><th>Statut</th></tr></thead>
+          <tbody id="orderRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Cars -->
+    <section id="tab-cars" class="hidden">
+      <div class="panel">
+        <h3>Ajouter un véhicule</h3>
+        <form id="addCarForm" class="form-grid">
+          <label>Marque <input name="brand" required></label>
+          <label>Modèle <input name="model" required></label>
+          <label>Catégorie
+            <select name="category"><option value="economy">Économique</option><option value="premium">Premium</option><option value="suv">SUV</option></select>
+          </label>
+          <label>Places <input name="seats" type="number" min="2" max="9" value="5"></label>
+          <label>Boîte
+            <select name="transmission"><option value="manual">Manuelle</option><option value="auto">Automatique</option></select>
+          </label>
+          <label>Carburant
+            <select name="fuel"><option value="petrol">Essence</option><option value="diesel">Diesel</option><option value="hybrid">Hybride</option><option value="electric">Électrique</option></select>
+          </label>
+          <label>Prix / jour (DT) <input name="pricePerDay" type="number" min="10" required></label>
+          <label>Lien photo (https://…) <input name="image" placeholder="optionnel"></label>
+          <button class="btn gold" type="submit">Ajouter</button>
+        </form>
+        <p id="carMsg" class="err"></p>
+      </div>
+      <div class="panel">
+        <h3>Flotte</h3>
+        <table>
+          <thead><tr><th>Véhicule</th><th>Catégorie</th><th>Prix / jour (DT)</th><th>Disponible</th><th>Lien photo</th><th></th></tr></thead>
+          <tbody id="carRows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="/admin.js"></script>
+</body>
+</html>
